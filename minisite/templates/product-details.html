@@ -1,0 +1,47 @@
+{% extends 'base.html'%} {% load static %} {% block title %}Product Details {% endblock title %} {% block content %}
+<!-- Product Section -->
+<section
+  class="flex flex-col items-center justify-center min-h-screen px-4 py-8"
+>
+  <!-- Background title text -->
+  <h1
+    class="absolute text-gray-500 text-[10rem] font-bold tracking-tight select-none opacity-20"
+  >
+    {{product.name}}
+  </h1>
+
+  <!-- Product Image -->
+  <div class="relative z-10 max-w-md w-full flex justify-center">
+    <img
+      src="{{product.image.url}}"
+      alt="Rochester Glasses"
+      class="w-full h-[200px] max-w-sm object-cover"
+      loading="lazy"
+    />
+  </div>
+
+  <!-- Product Info -->
+  <div class="relative z-10 mt-8 text-center space-y-3">
+    <h2 class="text-lg font-semibold tracking-widest text-gray-700">
+      {{product.name}}
+    </h2>
+    <p class="text-gray-500">{{product.price}}</p>
+    <p class="max-w-md mx-auto text-sm text-gray-500">
+      {{product.description}}
+    </p>
+  </div>
+
+  <!-- Buttons / Options -->
+  <div
+    class="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3"
+  >
+    <a
+      href="{% url 'add_to_cart' product.id %}"
+      class="bg-black text-white text-sm px-4 py-2 hover:bg-black transition"
+    >
+      Add To Cart<i class="bi bi-cart text-xl"></i>
+    </a>
+  </div>
+</section>
+
+{% endblock content %}

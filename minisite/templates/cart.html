@@ -1,0 +1,105 @@
+{% extends 'base.html' %} {% load static %} {% block title %}My Cart{% endblock title %} {% block content %}
+<div class="bg-white py-10 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header: Your Cart -->
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-4 border-b border-gray-200"
+    >
+      <h1 class="text-2xl font-bold text-gray-900 tracking-tight mb-2 sm:mb-0">
+        Your Cart {% if cart_items %}
+        <span class="text-sm font-medium text-gray-500 ml-2"
+          >{{ cart_items|length }} items</span
+        >
+        {% endif %}
+      </h1>
+      <p class="text-lg font-semibold text-gray-900">Total: ${{ total }}</p>
+    </div>
+
+    {% if cart_items %}
+    <!-- Cart Items -->
+    <div class="space-y-6">
+      {% for item in cart_items %}
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-100 pb-4"
+      >
+        <!-- Product Info -->
+        <div class="flex items-start gap-4 sm:flex-1">
+          <div
+            class="w-10 h-10 overflow-hidden rounded-md bg-gray-100 border border-gray-200"
+          >
+            <img
+              src="{{ item.product.image.url }}"
+              class="w-20 h-20 object-contain p-2"
+              alt="{{ item.product.name }}"
+            />
+          </div>
+          <div class="flex flex-col">
+            <h3 class="text-base font-medium text-gray-900">
+              {{ item.product.name }}
+            </h3>
+            <p class="text-sm text-gray-500 mt-1">Brand</p>
+            <p class="text-xs text-gray-400 mt-1 hidden sm:block">
+              Short product description goes here.
+            </p>
+          </div>
+        </div>
+
+        <!-- Quantity -->
+        <div
+          class="flex items-center mt-2 sm:mt-0 sm:justify-center w-full sm:w-20"
+        >
+          <span class="text-sm font-medium text-gray-900"
+            >{{ item.quantity }}</span
+          >
+        </div>
+
+        <!-- Price & Remove -->
+        <div
+          class="flex items-center justify-between sm:justify-end w-full sm:w-32 mt-2 sm:mt-0"
+        >
+          <p class="text-base font-medium text-gray-900">${{ item.total }}</p>
+          <a
+            href="{% url 'remove_from_cart' item.product.id %}"
+            class="text-gray-400 hover:text-red-500 ml-4 text-xl"
+            >&times;</a
+          >
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Actions -->
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center mt-12 pt-6 border-t border-gray-200 gap-4 sm:gap-0"
+    >
+      <a
+        href="{% url 'products' %}"
+        class="text-sm text-gray-800 hover:text-black underline"
+        >Continue shopping</a
+      >
+      <button
+        class="bg-black text-white font-medium text-sm tracking-wider uppercase px-6 py-3 rounded-none hover:bg-gray-800 transition shadow-md"
+      >
+        Proceed to checkout
+      </button>
+    </div>
+
+    {% else %}
+    <!-- Empty Cart -->
+    <div
+      class="text-center py-20 border border-dashed border-gray-300 rounded-xl bg-gray-50 max-w-2xl mx-auto"
+    >
+      <p class="text-gray-600 text-2xl font-medium mb-6">
+        Your cart is empty <span class="text-4xl">🛒</span>
+      </p>
+      <a
+        href="{% url 'products' %}"
+        class="bg-black text-white font-semibold tracking-wide px-8 py-4 rounded-none hover:bg-gray-800 transition shadow-md"
+      >
+        Start Exploring Products
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

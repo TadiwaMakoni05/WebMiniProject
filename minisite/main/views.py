@@ -1,0 +1,76 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product
+import random
+
+# 🏠 Home Page (random featured product)
+def home(request):
+    products = Product.objects.all()[:10]
+    header_product = random.choice(products) if products else None
+
+    return render(request, 'home.html', {
+        'products': products,
+        'header_product': header_product
+    })
+
+
+# 🛍 Product List Page
+def products(request):
+    products = Product.objects.all()
+    return render(request, 'products.html', {'products': products})
+
+
+# 📦 Product Detail Page
+def product_details(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'product-details.html', {'product': product})
+
+
+# ➕ Add to Cart
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    # Get or create cart from session
+    cart = request.session.get('cart', {})
+
+    # Add or increment product quantity
+    if str(product_id) in cart:
+        cart[str(product_id)] += 1
+    else:
+        cart[str(product_id)] = 1
+
+    request.session['cart'] = cart
+    request.session.modified = True
+
+    return redirect('cart')
+
+
+# 🧾 View Cart Page
+def cart(request):
+    cart = request.session.get('cart', {})
+    cart_items = []
+    total = 0
+
+    for product_id, quantity in cart.items():
+        product = get_object_or_404(Product, id=product_id)
+        item_total = product.price * quantity
+        total += item_total
+        cart_items.append({
+            'product': product,
+            'quantity': quantity,
+            'item_total': item_total,
+        })
+
+    return render(request, 'cart.html', {
+        'cart_items': cart_items,
+        'total': total
+    })
+
+
+# ❌ Remove item from cart
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', {})
+    if str(product_id) in cart:
+        del cart[str(product_id)]
+        request.session['cart'] = cart
+        request.session.modified = True
+    return redirect('cart')

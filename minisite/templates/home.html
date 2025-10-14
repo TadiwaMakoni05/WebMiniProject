@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+<div class="min-h-screen bg-[#f7f7f8] flex flex-col">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center px-6 sm:px-12 py-4 border-b border-gray-300">
+    <a href="{% url 'home' %}" class="font-semibold text-lg tracking-widest">TechVerse</a>
+    <div class="flex items-center gap-3">
+      <a href="{% url 'products' %}" class="text-gray-700 hover:text-black text-sm">Products</a>
+      <a href="#" class="text-gray-700 hover:text-black text-sm">
+        <i class="bi bi-cart text-xl"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero-section"
+    class="flex flex-col lg:flex-row justify-between items-center px-6 sm:px-12 py-12 lg:py-20 bg-gradient-to-b from-white to-gray-200 flex-grow">
+    {% if header_product %}
+    <div class="lg:w-1/2 w-full text-center lg:text-left">
+      <p class="text-gray-900 font-semibold mb-3 text-lg">/ {{ header_product.name }}</p>
+      <p class="text-gray-600 mb-6 text-sm sm:text-base">{{ header_product.description|truncatechars:200 }}</p>
+      <a href="{% url 'product_details' header_product.id %}"
+        class="border border-gray-800 text-gray-800 px-6 py-2 hover:bg-gray-800 hover:text-white transition">
+        BUY NOW 
+      </a>
+      <!-- <div class="mt-4">
+        <a href="{% url 'product_details' header_product.id %}"
+           class="text-gray-600 text-sm hover:underline">Product details</a>
+      </div> -->
+    </div>
+    <div class="lg:w-1/2 w-full flex justify-center mt-10 lg:mt-0">
+      <img src="{{ header_product.image.url }}" alt="{{ header_product.name }}"
+           class="w-[400px] max-w-[800px] h-[200px] object-cover" loading="lazy">
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Product Grid -->
+  <section class="relative p-6 sm:p-12 flex-grow">
+    <div class="flex justify-end mb-4">
+      <a href="{% url 'products' %}" class="bg-gray-800 text-white text-sm px-4 py-2 hover:bg-gray-700 transition">
+        More Products
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      {% for product in products %}
+      <div
+        class="group relative bg-gray-50 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]">
+        <div class="overflow-hidden">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}"
+               class="w-full h-64 object-cover transition-transform duration-700 ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-110">
+        </div>
+        <div
+          class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"></div>
+        <div
+          class="absolute inset-0 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-[cubic-bezier(.4,0,.2,1)]">
+          <h3 class="text-lg font-semibold text-white mb-1">{{ product.name }}</h3>
+          <p class="text-sm text-gray-200 mb-4">${{ product.price }}</p>
+          <div class="flex justify-between gap-4">
+          <a href="{% url 'add_to_cart' product.id %}" class="bg-white text-black text-sm px-4 py-2  hover:bg-black transition">
+            <i class="bi bi-cart text-xl"></i>
+          </a>
+            <a href="{% url 'product_details' product.id %}"
+               class="bg-white text-black text-sm px-4 py-2 hover:bg-black transition-all duration-300">
+              <i class="bi bi-zoom-in text-xl"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<!-- 🔁 JavaScript to auto-refresh header product every 5 seconds -->
+<script>
+  setInterval(() => {
+    fetch(window.location.href)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const newDoc = parser.parseFromString(html, 'text/html');
+        const newHero = newDoc.querySelector('#hero-section');
+        document.querySelector('#hero-section').innerHTML = newHero.innerHTML;
+      });
+  }, 10000);
+</script>
+
+{% endblock content %}
