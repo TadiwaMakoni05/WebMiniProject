@@ -12,17 +12,63 @@
     <title>{% block title %}TechVerse{% endblock title %}</title>
   </head>
 
-  <body class="w-full min-h-screen flex flex-col">
+  <body class="flex flex-col min-h-screen">
+  <!-- Main content should expand to fill space -->
+  <main class="flex-grow">
     {% block content %}{% endblock content %}
+  </main>
 
-    <footer class="bg-black text-white py-4">
-      <div
-        class="container mx-auto px-6 flex flex-col md:flex-row justify-center items-center"
-      >
-        <div class="mb-4 md:mb-0 text-center md:text-left">
-          <a href="{% url 'home'  %}" class="font-semibold text-lg">TechVerse</a> &copy; 2025. Made by <span class="font-bold text-lg"> Tadiwanashe Makoni</span>
-        </div>
+  <!-- Footer -->
+  <footer class="bg-black text-white py-4 mt-auto">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-center items-center">
+      <div class="mb-4 md:mb-0 text-center md:text-left">
+        <a href="{% url 'home' %}" class="font-semibold text-lg">TechVerse</a>
+        &copy; 2025. Made by
+        <a href="https://www.github.com/TadiwaMakoni05" target="_blank" class="font-bold text-lg">
+          Tadiwanashe Makoni
+        </a>
       </div>
-    </footer>
-  </body>
+    </div>
+  </footer>
+
+  <!-- Toast Notifications -->
+  {% if messages %}
+  <div id="toast-container" class="fixed top-5 right-5 space-y-3 z-50">
+    {% for message in messages %}
+    <div
+      class="toast transform transition-all duration-500 ease-in-out translate-x-5 opacity-0 px-4 py-3 rounded-md shadow-md text-white text-sm
+             {% if message.tags == 'success' %} bg-green-600
+             {% elif message.tags == 'warning' %} bg-yellow-500
+             {% elif message.tags == 'info' %} bg-blue-600
+             {% elif message.tags == 'error' %} bg-red-600
+             {% else %} bg-gray-800 {% endif %}">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toasts = document.querySelectorAll(".toast");
+
+      // Animate in
+      toasts.forEach((toast, index) => {
+        setTimeout(() => {
+          toast.classList.remove("translate-x-5", "opacity-0");
+          toast.classList.add("translate-x-0", "opacity-100");
+        }, index * 150);
+      });
+
+      // Fade out after 3 seconds
+      setTimeout(() => {
+        toasts.forEach((toast) => {
+          toast.classList.add("opacity-0", "translate-x-5");
+          setTimeout(() => toast.remove(), 500);
+        });
+      }, 3000);
+    });
+  </script>
+</body>
+
 </html>
