@@ -1,4 +1,15 @@
 {% extends 'base.html'%} {% load static %} {% block title %}Product Details {% endblock title %} {% block content %}
+
+  <!-- Header -->
+  <header class="flex justify-between items-center px-6 sm:px-12 py-4 border-b border-gray-300">
+    <a href="{% url 'home' %}" class="font-semibold text-lg tracking-widest">TechVerse</a>
+    <div class="flex items-center gap-3">
+      <a href="{% url 'products' %}" class="text-gray-700 hover:text-black text-sm">Products <i class="bi bi-house-fill text-xl"></i></a>
+      <a href="{% url 'cart' %}" class="text-gray-700 hover:text-black text-sm">
+        Cart<i class="bi bi-cart text-xl"></i>
+      </a>
+    </div>
+  </header>
 <!-- Product Section -->
 <section
   class="flex flex-col items-center justify-center min-h-screen px-4 py-8"
