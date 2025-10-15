@@ -1,5 +1,16 @@
 {% extends 'base.html' %} {% load static %} {% block title %}My Cart{% endblock title %} {% block content %}
+  <!-- Header -->
+  <header class="flex justify-between items-center px-6 sm:px-12 py-4 border-b border-gray-300">
+    <a href="{% url 'home' %}" class="font-semibold text-lg tracking-widest">TechVerse</a>
+    <div class="flex items-center gap-3">
+      <a href="{% url 'products' %}" class="text-gray-700 hover:text-black text-sm">Products <i class="bi bi-house-fill text-xl"></i></a>
+      <a href="{% url 'cart' %}" class="text-gray-700 hover:text-black text-sm">
+        Cart<i class="bi bi-cart text-xl"></i>
+      </a>
+    </div>
+  </header>
 <div class="bg-white py-10 px-4 sm:px-6 lg:px-8">
+
   <div class="max-w-6xl mx-auto">
     <!-- Header: Your Cart -->
     <div
@@ -25,11 +36,11 @@
         <!-- Product Info -->
         <div class="flex items-start gap-4 sm:flex-1">
           <div
-            class="w-10 h-10 overflow-hidden rounded-md bg-gray-100 border border-gray-200"
+            class="w-20 h-20 overflow-hidden rounded-md bg-gray-100 border border-gray-200"
           >
             <img
               src="{{ item.product.image.url }}"
-              class="w-20 h-20 object-contain p-2"
+              class="w-20 h-20 object-cover p-2"
               alt="{{ item.product.name }}"
             />
           </div>
@@ -39,7 +50,7 @@
             </h3>
             <p class="text-sm text-gray-500 mt-1">Brand</p>
             <p class="text-xs text-gray-400 mt-1 hidden sm:block">
-              Short product description goes here.
+              {{item.product.description|truncatechars:50}}
             </p>
           </div>
         </div>
@@ -57,7 +68,7 @@
         <div
           class="flex items-center justify-between sm:justify-end w-full sm:w-32 mt-2 sm:mt-0"
         >
-          <p class="text-base font-medium text-gray-900">${{ item.total }}</p>
+          <p class="text-base font-medium text-gray-900">${{ item.product.price }} Each</p>
           <a
             href="{% url 'remove_from_cart' item.product.id %}"
             class="text-gray-400 hover:text-red-500 ml-4 text-xl"
