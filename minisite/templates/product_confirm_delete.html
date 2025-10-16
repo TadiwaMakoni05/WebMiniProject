@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Deletion{% endblock title %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full bg-white p-8 text-center shadow-lg rounded-xl">
+        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+             <i class="bi bi-trash3-fill text-2xl text-red-600"></i>
+        </div>
+        <h2 class="mt-4 text-xl font-bold text-gray-900">Delete Product</h2>
+        <p class="mt-2 text-sm text-gray-600">
+            Are you sure you want to delete <strong>"{{ product.name }}"</strong>? This action cannot be undone.
+        </p>
+
+        <form method="POST" class="mt-6">
+            {% csrf_token %}
+            <div class="flex justify-center gap-4">
+                <a href="{% url 'manage_products' %}" class="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                    Cancel
+                </a>
+                <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                    Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
